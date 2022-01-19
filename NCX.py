@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Created on Tue Jan 18 13:21:59 2022
 
@@ -20,17 +21,34 @@ import numpy as np
 import skimage.io
 import skimage.color
 import skimage.filters
+import psf
+from skimage import transform
+from skimage import exposure
+
 
 img = tifffile.imread("C:/Users/pfon200/Documents/Python Scripts/NCX_sample.tif")
 print(img.shape)
 plt.imshow(img)
 
+sz = 1574
+args = {
+    'shape': (sz, sz),  # size of calculated psf array in pixels
+    'dims': (66.96/1000*sz, 66.96/1000*sz),  # size of array in microns
+    'em_wavelen': 520.0,  # emission wavelength in nanometers
+    'num_aperture': 1.25,  # numerical aperture
+    'refr_index': 1.333,  # refractive index
+    'magnification': 100,  # magnification
+}
+
+gauss = psf.PSF(psf.GAUSSIAN | psf.EMISSION, **args)
+
+psf_ideal = gauss.volume()
 
 #plt.imshow(img, cmap="gray")  #sets cmap gray
 #plt.axis('off')
 #plt.show()
 
-gray_image = skimage.color.rgb2gray(img)
+"""gray_image = skimage.color.rgb2gray(img)
 blurred_image = skimage.filters.gaussian(gray_image, sigma=1.0)
 fig, ax = plt.subplots()
 plt.imshow(blurred_image, cmap='gray')
@@ -42,4 +60,3 @@ plt.title("Grayscale Histogram")
 plt.xlabel("grayscale value")
 plt.ylabel("pixels")
 plt.xlim(0, 1.0)
-plt.show()
