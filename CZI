@@ -1,0 +1,37 @@
+"""
+Created on Thu Feb 10 16:57:19 2022
+
+@author: pfon200
+
+
+pip install aicsimageio[czi]
+pip install aicsimageio
+
+print CZI img.shape 
+(1, 2, 53, 388, 488,1)
+
+1 time series
+2 channels
+53 slices for each channel (z-stack)
+488 (x-axis) x 388 (y-axis) pixels
+
+"""
+
+import czifile
+from skimage import io
+from aicsimageio import AICSImage
+import numpy as np
+import matplotlib.pyplot as plt
+import os
+
+indir = 'C:/Users/pfon200/Documents/RA Control Rabbit_WGA+RyR/RA Control Rabbit_WGA+RyR/2.1z_airy_procc- RA60.czi'
+
+#img = czifile.imread(indir)
+#print(img.shape)
+
+
+img = AICSImage(indir)
+img.data  # returns 6D STCZYX numpy array
+img.dims  # returns string "STCZYX"
+img.shape  # returns tuple of dimension sizes in STCZYX order
+img.get_image_data("CZYX", T=0) # returns 4D CZYX numpy array
