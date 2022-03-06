@@ -9,7 +9,7 @@ WGA_RyR <- read_excel("Downloads/WGA+RyR.xlsx")
 View(WGA_RyR)
 
 summary (RA_WGA_RyR1)
-#hist(RA_WGA_RyR1,prob = TRUE)
+hist(RA_WGA_RyR1,prob = TRUE) # individuals
 
 
 ggp <- ggplot(WGA_RyR_all, aes(x = x, fill = class)) +  
