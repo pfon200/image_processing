@@ -3,14 +3,53 @@ colours
 http://derekogle.com/NCGraphing/resources/colors
 """
 
+# individual plots
+library(readxl)
+LA1_WGA_RyR <- read_excel("Downloads/LA1_WGA+RyR.xlsx")
+View(LA1_WGA_RyR)
+summary (LA1_WGA_RyR)
+ggp <- ggplot(LA1_WGA_RyR, aes(x = x, fill = class)) +  
+    geom_histogram(binwidth=0.06, alpha=0.7,position='identity', color="darkslategray") + scale_fill_manual(values = c("navyblue")) +
+    theme_bw() +
+    theme(axis.line = element_line(color='white'),
+          plot.background = element_blank(),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.border = element_blank())
+ggp
 
+
+#geompoint with errorbar - draw on top of jitter plot
+d=data.frame(atria=c("LA","RA"), mean=c(1.4236,1.474106), lower=c(0.7316,0.743646), upper=c(2.0975,2.167142))
+ggplot() + geom_line()+
+    geom_pointrange(data=d, mapping=aes(x=atria, y=mean, ymin=upper, ymax=lower), size=1, color="black",shape=19) + ylim(0,3)
+
+
+#jitter
+e <- ggplot(WGA_RyR_jitter, aes(x = class, y = x)) + geom_jitter(
+    aes(shape = class, color = class), 
+    position = position_jitterdodge(jitter.width = 0.4, dodge.width = 0.8),
+    size = 2
+) +
+    stat_summary(
+        aes(color = class),
+        fun.data="mean_sdl",  fun.args = list(mult=1), 
+        geom = "pointrange",  size = 0.4,
+        position = position_dodge(0.8)
+    )+
+    scale_color_manual(values =  c("blue", "hotpink")) +
+    theme_bw() +
+    theme(axis.line = element_line(color='white'),
+          plot.background = element_blank(),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.border = element_blank())
+e 
+
+#everything
 library(readxl)
 WGA_RyR <- read_excel("Downloads/WGA+RyR.xlsx")
 View(WGA_RyR)
-
-summary (RA_WGA_RyR1)
-hist(RA_WGA_RyR1,prob = TRUE) # individuals
-
 
 ggp <- ggplot(WGA_RyR_all, aes(x = x, fill = class)) +  
     geom_histogram(binwidth=0.06,alpha=0.7, position='identity', color="darkslategray") + scale_fill_manual(values = c("navyblue", "pink")) +
