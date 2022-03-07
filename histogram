@@ -44,7 +44,7 @@ e <- ggplot(WGA_RyR_jitter, aes(x = class, y = x)) + geom_jitter(
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
           panel.border = element_blank())
-e 
+e + ylim(1.2, 1.6)
 
 #everything
 library(readxl)
