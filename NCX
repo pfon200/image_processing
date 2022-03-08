@@ -1,0 +1,236 @@
+
+library(DT) 
+library(lme4)
+library(tidyverse)
+library(merTools)
+library(lmerTest)
+library(pbkrtest)
+
+library(readxl)
+NCX <- read_excel("Downloads/NCX.xlsx", sheet = "all")
+View(NCX)
+
+#descriptive statistic - shttp://www.sthda.com/english/wiki/descriptive-statistics-and-graphics (only if excel formatted certain way)
+
+model1<-lmer(percen~1+(1|sample),REML=FALSE,data=NCX)
+summary(model1)
+confint(model1)              #calculating confidence intervals
+
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method [
+lmerModLmerTest]
+Formula: percen ~ 1 + (1 | sample)
+   Data: NCX
+
+     AIC      BIC   logLik deviance df.resid 
+  2159.9   2170.4  -1076.9   2153.9      241 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.5099 -0.5962 -0.0199  0.5326  3.6587 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ sample   (Intercept) 184.7    13.59   
+ Residual             312.6    17.68   
+Number of obs: 244, groups:  sample, 39
+
+Fixed effects:
+            Estimate Std. Error     df t value Pr(>|t|)    
+(Intercept)   45.706      2.464 39.682   18.55   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> confint(model1)              #calculating confidence intervals
+Computing profile confidence intervals ...
+               2.5 %   97.5 %
+.sig01      10.24941 18.14233
+.sigma      16.10034 19.53440
+(Intercept) 40.73918 50.63910
+> model2<-lmer(percen~1+region+(1|sample),REML=FALSE,data=NCX)
+> summary(model2)
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method [
+lmerModLmerTest]
+Formula: percen ~ 1 + region + (1 | sample)
+   Data: NCX
+
+     AIC      BIC   logLik deviance df.resid 
+  2158.4   2172.3  -1075.2   2150.4      240 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.4236 -0.6348 -0.0155  0.5377  3.5709 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ sample   (Intercept) 185.5    13.62   
+ Residual             307.3    17.53   
+Number of obs: 244, groups:  sample, 39
+
+Fixed effects:
+            Estimate Std. Error      df t value Pr(>|t|)    
+(Intercept)   43.585      2.707  57.245  16.099   <2e-16 ***
+regionSS       4.237      2.244 205.908   1.888   0.0605 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+         (Intr)
+regionSS -0.414
+> anova(model1,model2)
+Data: NCX
+Models:
+model1: percen ~ 1 + (1 | sample)
+model2: percen ~ 1 + region + (1 | sample)
+       npar    AIC    BIC  logLik deviance  Chisq Df Pr(>Chisq)  
+model1    3 2159.9 2170.4 -1076.9   2153.9                       
+model2    4 2158.3 2172.3 -1075.2   2150.3 3.5327  1    0.06017 .
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> confint(model2)
+Computing profile confidence intervals ...
+                 2.5 %    97.5 %
+.sig01      10.2882084 18.164223
+.sigma      15.9627179 19.367751
+(Intercept) 38.1722514 48.969880
+regionSS    -0.1829226  8.655959
+> model2<-lmer(percen~1+atria+(1|sample),REML=FALSE,data=NCX)
+> summary(model2)
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method [
+lmerModLmerTest]
+Formula: percen ~ 1 + atria + (1 | sample)
+   Data: NCX
+
+     AIC      BIC   logLik deviance df.resid 
+  2161.9   2175.9  -1076.9   2153.9      240 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.5085 -0.5975 -0.0187  0.5313  3.6592 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ sample   (Intercept) 184.6    13.59   
+ Residual             312.6    17.68   
+Number of obs: 244, groups:  sample, 39
+
+Fixed effects:
+            Estimate Std. Error      df t value Pr(>|t|)    
+(Intercept)  45.8070     3.5565 40.6401  12.880 6.22e-16 ***
+atriaRA      -0.1937     4.9316 39.6915  -0.039    0.969    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+        (Intr)
+atriaRA -0.721
+> anova(model1,model2)
+Data: NCX
+Models:
+model1: percen ~ 1 + (1 | sample)
+model2: percen ~ 1 + atria + (1 | sample)
+       npar    AIC    BIC  logLik deviance  Chisq Df Pr(>Chisq)
+model1    3 2159.9 2170.4 -1076.9   2153.9                     
+model2    4 2161.9 2175.9 -1076.9   2153.9 0.0015  1     0.9687
+> confint(model2)
+Computing profile confidence intervals ...
+                2.5 %    97.5 %
+.sig01       10.24183 18.141477
+.sigma       16.10061 19.535347
+(Intercept)  38.60985 52.897314
+atriaRA     -10.03300  9.787755
+
+> m <- lmer(percen ~ region+(1|sample), NCX)                
+> summary(m)
+Linear mixed model fit by REML. t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: percen ~ region + (1 | sample)
+   Data: NCX
+
+REML criterion at convergence: 2143.2
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.4204 -0.6292 -0.0139  0.5355  3.5640 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ sample   (Intercept) 191.3    13.83   
+ Residual             308.8    17.57   
+Number of obs: 244, groups:  sample, 39
+
+Fixed effects:
+            Estimate Std. Error      df t value Pr(>|t|)    
+(Intercept)   43.581      2.737  55.374  15.920   <2e-16 ***
+regionSS       4.237      2.250 204.851   1.883   0.0611 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+         (Intr)
+regionSS -0.411
+> anova(m)
+Type III Analysis of Variance Table with Satterthwaite's method
+       Sum Sq Mean Sq NumDF  DenDF F value  Pr(>F)  
+region 1094.8  1094.8     1 204.85  3.5455 0.06112 .
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> anova(m, ddf="Kenward-Roger")
+Type III Analysis of Variance Table with Kenward-Roger's method
+       Sum Sq Mean Sq NumDF  DenDF F value  Pr(>F)  
+region 1094.8  1094.8     1 204.12  3.5455 0.06113 .
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> anova(m, ddf="lme4")
+Analysis of Variance Table
+       npar Sum Sq Mean Sq F value
+region    1 1094.8  1094.8  3.5455
+> 
+> m <- lmer(percen ~ atria+region+(1|sample), NCX)                
+> summary(m)
+Linear mixed model fit by REML. t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: percen ~ atria + region + (1 | sample)
+   Data: NCX
+
+REML criterion at convergence: 2138.2
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.4257 -0.6239 -0.0125  0.5352  3.5665 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ sample   (Intercept) 197.7    14.06   
+ Residual             308.8    17.57   
+Number of obs: 244, groups:  sample, 39
+
+Fixed effects:
+            Estimate Std. Error       df t value Pr(>|t|)    
+(Intercept)  43.6527     3.8177  45.9487  11.434 4.92e-15 ***
+atriaRA      -0.1462     5.0604  37.5624  -0.029   0.9771    
+regionSS      4.2365     2.2501 204.7316   1.883   0.0611 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+         (Intr) atriRA
+atriaRA  -0.689       
+regionSS -0.295  0.000
+> anova(m)
+Type III Analysis of Variance Table with Satterthwaite's method
+        Sum Sq Mean Sq NumDF   DenDF F value  Pr(>F)  
+atria     0.26    0.26     1  37.562  0.0008 0.97711  
+region 1094.83 1094.83     1 204.732  3.5451 0.06114 .
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> anova(m, ddf="Kenward-Roger")
+Type III Analysis of Variance Table with Kenward-Roger's method
+        Sum Sq Mean Sq NumDF   DenDF F value  Pr(>F)  
+atria     0.26    0.26     1  36.935  0.0008 0.97712  
+region 1094.83 1094.83     1 204.114  3.5451 0.06115 .
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> anova(m, ddf="lme4")
+Analysis of Variance Table
+       npar  Sum Sq Mean Sq F value
+atria     1    0.26    0.26  0.0008
+region    1 1094.83 1094.83  3.5451
+
+
