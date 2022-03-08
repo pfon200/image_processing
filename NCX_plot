@@ -1,0 +1,30 @@
+
+library(tidyverse)
+library(dplyr)
+library(ggtext)
+library(readxl)
+library(ggplot2)
+
+library(readxl)
+NCX <- read_excel("Downloads/NCX.xlsx", sheet = "all")
+View(NCX)
+
+e <- ggplot(NCX, aes(x = region, y = percen)) + geom_jitter(
+    aes(shape = sample, color = region), 
+    position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.3),
+    size = 1
+) +
+    stat_summary(
+        aes(color = region),
+        fun.data="mean_sdl",  fun.args = list(mult=1), 
+        geom = "pointrange",  size = 0.5,         #geom = "errorbar" does not look good
+        position = position_dodge(0.8)
+    )+
+    scale_color_manual(values =  c("lightblue", "blue", "pink", "hotpink")) +
+    theme_bw() +
+    theme(axis.line = element_line(color='white'),
+          plot.background = element_blank(),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.border = element_blank())
+e 
