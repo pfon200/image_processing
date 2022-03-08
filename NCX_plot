@@ -20,7 +20,7 @@ e <- ggplot(NCX, aes(x = region, y = percen)) + geom_jitter(
         geom = "pointrange",  size = 0.5,         #geom = "errorbar" does not look good
         position = position_dodge(0.8)
     )+
-    scale_color_manual(values =  c("lightblue", "blue", "pink", "hotpink")) +
+    scale_color_manual(values =  c("blue", "blue4", "hotpink", "red")) +
     theme_bw() +
     theme(axis.line = element_line(color='white'),
           plot.background = element_blank(),
