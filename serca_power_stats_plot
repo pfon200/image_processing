@@ -27,3 +27,26 @@ summary(m)
 anova(m)
 anova(m, ddf="Kenward-Roger")
 anova(m, ddf="lme4")
+
+
+library(tidyverse)
+library(dplyr)
+library(ggtext)
+library(readxl)
+library(ggplot2)
+
+p <- ggplot(serca_TT, aes(x = type, y = sarcomere_spacing, color = sample, shape = type)) +
+    geom_jitter(width=0.15) +
+    stat_summary(
+        fun = mean,
+        geom = "point",
+        size = 2,
+        color = "blue"
+    ) +   
+    theme_bw() +
+    theme(axis.line = element_line(color='white'),
+          plot.background = element_blank(),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.border = element_blank())
+p
